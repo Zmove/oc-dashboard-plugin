@@ -1,0 +1,7 @@
+1.0.1:
+    - "Version initiale des modules de tableau de bord : Interlocuteur, Statut du site et Iframe."
+1.0.2:
+    - "Nouveau bloc Version (October CMS et PHP) ; le Statut du site et l'Interlocuteur sont recentrés pour équilibrer les hauteurs."
+1.0.3:
+    - "Le bloc Version affiche la dernière version disponible sous son statut."
+    - "Le bloc Interlocuteur affiche un pictogramme à la place de la photo."

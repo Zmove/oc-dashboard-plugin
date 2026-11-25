@@ -1,0 +1,40 @@
+<?= $this->styles() ?>
+<div class="<?= $this->rootClass() ?>">
+    <?php if (isset($error)): ?>
+        <p class="zm-dash-error"><?= e($error) ?></p>
+    <?php else: ?>
+        <div class="zm-dash-header">
+            <span class="zm-dash-badge zm-dash-tone--<?= e($status['tone']) ?>"><i class="<?= e($status['icon']) ?>"></i></span>
+            <div class="zm-dash-text">
+                <span class="zm-dash-eyebrow"><?= e($this->widgetTitle()) ?></span>
+                <p class="zm-dash-headline"><?= e($status['text']) ?></p>
+                <ul class="zm-dash-meta">
+                    <li><?= e($status['note']) ?></li>
+                </ul>
+            </div>
+        </div>
+
+        <ul class="zm-dash-facts">
+            <li class="zm-dash-fact">
+                <span class="zm-dash-fact__icon zm-dash-tone--october"><i class="ph ph-stack"></i></span>
+                <div class="zm-dash-fact__text">
+                    <span class="zm-dash-fact__label">Version actuelle</span>
+                    <span class="zm-dash-fact__value"><?= e($october['current']) ?></span>
+                </div>
+            </li>
+            <li class="zm-dash-fact">
+                <span class="zm-dash-fact__icon zm-dash-tone--php"><i class="ph ph-code"></i></span>
+                <div class="zm-dash-fact__text">
+                    <span class="zm-dash-fact__label">Version de PHP</span>
+                    <span class="zm-dash-fact__value"><?= e($phpVersion) ?></span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="zm-dash-footer">
+            <a href="<?= e($changelogUrl) ?>" target="_blank" rel="noopener noreferrer">
+                Voir le changelog <?= $this->icon('external') ?>
+            </a>
+        </div>
+    <?php endif ?>
+</div>

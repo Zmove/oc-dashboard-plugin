@@ -1,0 +1,44 @@
+<?= $this->styles() ?>
+<div class="<?= $this->rootClass() ?>">
+    <?php if (isset($error)): ?>
+        <p class="zm-dash-error"><?= e($error) ?></p>
+    <?php else: ?>
+        <?php $statusTone = $isDown ? 'zm-dash-tone--maintenance' : 'zm-dash-tone--online' ?>
+        <div class="zm-dash-header">
+            <span class="zm-dash-badge <?= $statusTone ?>"><i class="ph ph-power"></i></span>
+            <div class="zm-dash-text">
+                <span class="zm-dash-eyebrow">Statut du site</span>
+                <p class="zm-dash-headline">
+                    <?= $isDown ? 'En maintenance' : 'En ligne' ?>
+                    <span class="zm-dash-pulse <?= $statusTone ?>" aria-hidden="true"></span>
+                </p>
+                <ul class="zm-dash-meta">
+                    <li>
+                        <a href="<?= e($siteUrl) ?>" target="_blank" rel="noopener noreferrer">
+                            <?= e($siteHost) ?> <?= $this->icon('external') ?>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <?php if ($launchDate): ?>
+            <ul class="zm-dash-facts">
+                <li class="zm-dash-fact">
+                    <span class="zm-dash-fact__icon zm-dash-tone--launch"><i class="ph ph-calendar-check"></i></span>
+                    <div class="zm-dash-fact__text">
+                        <span class="zm-dash-fact__label"><?= $isLaunched ? 'Mise en ligne' : 'Mise en ligne prévue' ?></span>
+                        <span class="zm-dash-fact__value"><?= e($launchDate) ?></span>
+                        <span class="zm-dash-fact__meta"><?= e($launchAge) ?></span>
+                    </div>
+                </li>
+            </ul>
+        <?php endif ?>
+
+        <div class="zm-dash-footer">
+            <a href="<?= e($maintenanceSettingsUrl) ?>">
+                <?= $isDown ? 'Remettre le site en ligne' : 'Mettre en maintenance' ?>
+            </a>
+        </div>
+    <?php endif ?>
+</div>

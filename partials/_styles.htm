@@ -1,0 +1,229 @@
+<style>
+/* Our widgets should always line up to the same height when sharing a row, regardless of
+   whether the dashboard row's own "Étirer les widgets" option has been turned on, so we force
+   the row's flex items to stretch whenever at least one Zmove widget sits in it. */
+.oc-dashboard .report-row:has(.zm-dash) .row-widgets { align-items: stretch; }
+
+/* Propagates that definite height down to our widget root so it can stretch to match its row
+   siblings. No-op otherwise, since percentage heights resolve to auto against an auto-height
+   ancestor. */
+.oc-dashboard .widget-size-container { height: 100%; }
+.oc-dashboard .dashboard-report-widget-static { height: 100%; }
+.oc-dashboard .dashboard-report-widget-static .static-body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.oc-dashboard .dashboard-report-widget-static .static-body > [data-request-data] {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+}
+/* Our own header already shows the icon + title, so the native title above it would be a duplicate */
+.oc-dashboard .static-body:has(> [data-request-data] .zm-dash) > h3.widget-title {
+    display: none;
+}
+
+.zm-dash {
+    /* Lets the fact grid switch to two columns from the widget's own width rather than the
+       viewport's, since the same widget can be dropped in a narrow or a wide dashboard slot. */
+    container: zm-dash / inline-size;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+}
+.zm-dash p { margin: 0 0 .5rem; }
+.zm-dash a { word-break: break-word; color: var(--bs-link-color, var(--bs-primary, #2196f3)); text-decoration: none; }
+.zm-dash a:hover { text-decoration: underline; }
+.zm-dash-error { color: #e05353; margin: 0; }
+.zm-dash-empty { opacity: .65; font-style: italic; margin: 0; }
+
+.zm-dash-icon { width: 100%; height: 100%; }
+
+/* Accent palette: each tone feeds the solid header badges, the tinted fact tiles and the pulse dot */
+.zm-dash-tone--online { --zm-dash-accent-rgb: 39, 174, 96; }
+.zm-dash-tone--maintenance { --zm-dash-accent-rgb: 230, 126, 34; }
+.zm-dash-tone--launch { --zm-dash-accent-rgb: 20, 184, 166; }
+.zm-dash-tone--php { --zm-dash-accent-rgb: 119, 123, 180; }
+.zm-dash-tone--neutral { --zm-dash-accent-rgb: 128, 128, 140; }
+.zm-dash-tone--october { --zm-dash-accent-rgb: 14, 165, 233; }
+.zm-dash-tone--contact { --zm-dash-accent-rgb: 99, 102, 241; }
+.zm-dash-tone--phone { --zm-dash-accent-rgb: 16, 185, 129; }
+.zm-dash-tone--iframe { --zm-dash-accent-rgb: 139, 92, 246; }
+
+/* Card layout: icon + headline in the header, free content in the body, a bleeding footer bar for links/actions */
+.zm-dash-header { display: flex; align-items: flex-start; gap: .85rem; }
+.zm-dash-text { min-width: 0; }
+.zm-dash-eyebrow {
+    display: block;
+    font-size: 14px;
+    color: var(--bs-secondary-color);
+    font-weight: normal;
+    margin: 0 0 .1rem;
+}
+/* Scoped to .zm-dash-text (rather than .zm-dash-headline alone) so this margin reliably wins
+   over the generic ".zm-dash p" rule. */
+.zm-dash-text .zm-dash-headline {
+    display: block;
+    font-size: 24px;
+    font-weight: normal;
+    margin: 0 0 .35rem;
+    color: var(--bs-body-color);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+/* Secondary line under the headline (company, site address...), sized so every header in a
+   row ends at the same height and their fact grids line up. */
+.zm-dash-meta {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .15rem 1rem;
+    font-size: 13px;
+    color: var(--bs-secondary-color);
+}
+.zm-dash-meta li { display: inline-flex; align-items: center; gap: .35rem; min-width: 0; }
+.zm-dash-meta .zm-dash-icon { flex: 0 0 auto; width: 14px; height: 14px; }
+.zm-dash .zm-dash-meta a { display: inline-flex; align-items: center; gap: .3rem; color: inherit; }
+.zm-dash .zm-dash-meta a:hover { color: var(--bs-body-color); }
+
+.zm-dash-body { flex: 1 1 auto; min-height: 0; margin-top: .9rem; overflow: auto; }
+
+/* Guarantees breathing room above the footer bar, whatever block it follows */
+.zm-dash-header:has(+ .zm-dash-footer),
+.zm-dash-body:has(+ .zm-dash-footer),
+.zm-dash-facts:has(+ .zm-dash-footer) {
+    margin-bottom: 1.1rem;
+}
+
+.zm-dash-footer {
+    margin-top: auto;
+    margin-left: calc(var(--oc-widget-body-padding, 17px) * -1);
+    margin-right: calc(var(--oc-widget-body-padding, 17px) * -1);
+    margin-bottom: -11px;
+    padding: 10px var(--oc-widget-body-padding, 17px);
+    background: var(--oc-sidebar-bg, var(--bs-tertiary-bg));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .3rem 1.25rem;
+}
+.zm-dash-footer a { display: inline-flex; align-items: center; gap: .35rem; }
+.zm-dash-footer .zm-dash-icon { flex: 0 0 auto; width: 14px; height: 14px; opacity: .7; }
+
+/* Solid colored badge matching October's own .indicator-icon, slightly downsized for a lighter look */
+.zm-dash-badge {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: rgb(var(--zm-dash-accent-rgb, 99, 102, 241));
+    color: #fff;
+}
+.zm-dash-badge i { font-size: 28px; line-height: 1; color: inherit; }
+
+/* Live status dot next to the headline, with a soft ripple for the "live" feel */
+.zm-dash-pulse {
+    position: relative;
+    top: -.12em;
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-left: .45rem;
+    border-radius: 50%;
+    background: rgb(var(--zm-dash-accent-rgb));
+    vertical-align: middle;
+}
+.zm-dash-pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: zm-dash-pulse 2.4s cubic-bezier(0, 0, .2, 1) infinite;
+}
+@keyframes zm-dash-pulse {
+    0% { transform: scale(1); opacity: .6; }
+    75%, 100% { transform: scale(3.2); opacity: 0; }
+}
+
+.zm-dash-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: .6rem;
+    padding: 1.25rem .5rem;
+    margin: auto 0;
+}
+
+/* Key facts under the header: a tinted icon tile followed by label, value and an optional
+   detail line. One column in narrow slots, two side by side once there is room, an odd last
+   fact then taking the full row. */
+.zm-dash-facts {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 1rem 0 0;
+    border-top: 1px solid var(--bs-border-color);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem 1.5rem;
+}
+@container zm-dash (min-width: 520px) {
+    .zm-dash-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .zm-dash-fact:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+.zm-dash-fact { display: flex; align-items: flex-start; gap: .85rem; min-width: 0; }
+.zm-dash-fact__icon {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(var(--zm-dash-accent-rgb), .14);
+    color: rgb(var(--zm-dash-accent-rgb));
+}
+.zm-dash-fact__icon i { font-size: 22px; line-height: 1; }
+.zm-dash-fact__text { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.zm-dash-fact__label { font-size: 13px; line-height: 1.4; color: var(--bs-secondary-color); }
+.zm-dash-fact__value {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--bs-body-color);
+    overflow-wrap: anywhere;
+}
+.zm-dash-fact__meta { font-size: 13px; line-height: 1.45; color: var(--bs-secondary-color); overflow-wrap: anywhere; }
+
+/* Classic dashboard (default up to October CMS 3.x): the root doubles as the core "report-widget"
+   card, whose 15px padding the footer bar bleeds into, and the drag handle shown when hovering a
+   sortable widget needs room next to the header badge, as the core widget titles make. */
+.zm-dash--legacy { height: 100%; }
+.zm-dash--legacy .zm-dash-footer {
+    margin: auto -15px -15px;
+    padding: 10px 15px;
+    border-radius: 0 0 6px 6px;
+}
+.zm-dash--legacy .zm-dash-header { transition: padding .2s; }
+.report-container > ul .item.is-sortable:hover .zm-dash--legacy .zm-dash-header { padding-left: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+    .zm-dash-pulse::after { animation: none; }
+}
+
+.zm-dash-iframe { width: 100%; height: 100%; min-height: 120px; border: 0; display: block; border-radius: 6px; }
+</style>

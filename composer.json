@@ -1,0 +1,11 @@
+{
+    "name": "zmove/dashboard-plugin",
+    "type": "october-plugin",
+    "description": "Zmove dashboard widgets for October CMS.",
+    "keywords": ["october", "cms", "plugin", "dashboard", "widgets"],
+    "license": "MIT",
+    "require": {
+        "composer/installers": "~1.0",
+        "october/rain": "^3.6 || ^4.0"
+    }
+}

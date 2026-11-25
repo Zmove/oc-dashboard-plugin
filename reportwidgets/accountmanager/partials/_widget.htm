@@ -1,0 +1,56 @@
+<?= $this->styles() ?>
+<div class="<?= $this->rootClass() ?>">
+    <?php if (isset($error)): ?>
+        <p class="zm-dash-error"><?= e($error) ?></p>
+    <?php elseif (!$managerName && !$managerEmail && !$managerPhone): ?>
+        <div class="zm-dash-placeholder">
+            <span class="zm-dash-badge zm-dash-tone--contact"><?= $this->badgeIcon('ph ph-user') ?></span>
+            <p class="zm-dash-empty">Renseignez votre interlocuteur dans la configuration du module.</p>
+        </div>
+    <?php else: ?>
+        <div class="zm-dash-header">
+            <span class="zm-dash-badge zm-dash-tone--contact"><?= $this->badgeIcon('ph ph-user') ?></span>
+            <div class="zm-dash-text">
+                <span class="zm-dash-eyebrow"><?= e($this->widgetTitle()) ?></span>
+                <p class="zm-dash-headline"><?= e($managerName ?: ($managerCompany ?: 'Non renseigné')) ?></p>
+                <?php if ($managerName && $managerCompany): ?>
+                    <ul class="zm-dash-meta">
+                        <li><?= $this->icon('building') ?> <?= e($managerCompany) ?></li>
+                    </ul>
+                <?php endif ?>
+            </div>
+        </div>
+
+        <?php if ($managerEmail || $managerPhone): ?>
+            <ul class="zm-dash-facts">
+                <?php if ($managerEmail): ?>
+                    <li class="zm-dash-fact">
+                        <span class="zm-dash-fact__icon zm-dash-tone--contact"><i class="ph ph-envelope-simple"></i></span>
+                        <div class="zm-dash-fact__text">
+                            <span class="zm-dash-fact__label">Email</span>
+                            <span class="zm-dash-fact__value"><?= e($managerEmail) ?></span>
+                        </div>
+                    </li>
+                <?php endif ?>
+                <?php if ($managerPhone): ?>
+                    <li class="zm-dash-fact">
+                        <span class="zm-dash-fact__icon zm-dash-tone--phone"><i class="ph ph-phone"></i></span>
+                        <div class="zm-dash-fact__text">
+                            <span class="zm-dash-fact__label">Téléphone</span>
+                            <span class="zm-dash-fact__value"><?= e($managerPhone) ?></span>
+                        </div>
+                    </li>
+                <?php endif ?>
+            </ul>
+
+            <div class="zm-dash-footer">
+                <?php if ($managerEmail): ?>
+                    <a href="mailto:<?= e($managerEmail) ?>"><?= $this->icon('email') ?> Écrire un email</a>
+                <?php endif ?>
+                <?php if ($managerPhone): ?>
+                    <a href="<?= e($this->phoneHref($managerPhone)) ?>"><?= $this->icon('phone') ?> Appeler</a>
+                <?php endif ?>
+            </div>
+        <?php endif ?>
+    <?php endif ?>
+</div>
