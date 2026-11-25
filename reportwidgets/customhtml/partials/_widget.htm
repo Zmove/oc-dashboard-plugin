@@ -1,0 +1,27 @@
+<?= $this->styles() ?>
+<div class="<?= $this->rootClass() ?>">
+    <?php if (isset($error)): ?>
+        <p class="zm-dash-error"><?= e($error) ?></p>
+    <?php elseif ($html === ''): ?>
+        <div class="zm-dash-placeholder">
+            <span class="zm-dash-badge zm-dash-tone--html"><?= $this->badgeIcon('ph ph-megaphone') ?></span>
+            <p class="zm-dash-empty">Aucun code HTML renseigné. Ajoutez-le dans la configuration du module.</p>
+        </div>
+    <?php else: ?>
+        <?php if ($showHeader): ?>
+            <div class="zm-dash-header">
+                <span class="zm-dash-badge zm-dash-tone--html"><?= $this->badgeIcon('ph ph-megaphone') ?></span>
+                <div class="zm-dash-text">
+                    <span class="zm-dash-eyebrow"><?= e($this->widgetTitle()) ?></span>
+                    <?php if ($headline): ?>
+                        <p class="zm-dash-headline"><?= e($headline) ?></p>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endif ?>
+
+        <div class="zm-dash-body zm-dash-html<?= $showHeader ? '' : ' zm-dash-html--bare' ?>">
+            <?= $html ?>
+        </div>
+    <?php endif ?>
+</div>

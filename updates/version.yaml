@@ -5,3 +5,5 @@
 1.0.3:
     - "Le bloc Version affiche la dernière version disponible sous son statut."
     - "Le bloc Interlocuteur affiche un pictogramme à la place de la photo."
+1.0.4:
+    - "Nouveau bloc HTML personnalisé (code HTML affiché tel quel, scripts compris)."
